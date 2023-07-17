@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Hotel Reservation</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"> 
+  <link href="assets/css/style.css" rel="stylesheet">
+  <style>
+
+    .form {
+      position: relative;
+      z-index: 1;
+      background: #FFFFFF;
+      max-width: 400px;
+      margin: 0 auto 100px;
+      margin-bottom: 500px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+    }
+    .form input {
+      font-family: "Roboto", sans-serif;
+      outline: 0;
+      background: #f2f2f2;
+      width: 100%;
+      border: 0;
+      margin: 0 0 15px;
+      padding: 15px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+    .form button {
+      font-family: "Roboto", sans-serif;
+      text-transform: uppercase;
+      outline: 0;
+      background: #4CAF50;
+      width: 100%;
+      border: 0;
+      padding: 15px;
+      color: #FFFFFF;
+      font-size: 14px;
+      -webkit-transition: all 0.3 ease;
+      transition: all 0.3 ease;
+      cursor: pointer;
+    }
+    .form button:hover,.form button:active,.form button:focus {
+      background: #43A047;
+    }
+    .form .message {
+      margin: 15px 0 0;
+      color: #b3b3b3;
+      font-size: 12px;
+    }
+    .form .message a {
+      color: #4CAF50;
+      text-decoration: none;
+    }
+    .form .register-form {
+      display: none;
+    }
+    #txt{
+        text-align: left;
+    }
+    
+      </style>
+</head>
+
+<body>
+  <header id="header" class="header fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <a href="index.html" class="logo d-flex align-items-center">
+        <img src="assets/img/logo.png" alt="">
+        <span>Tech Gradiator</span>
+      </a>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link active" href="admindashboard.html">Home</a></li>
+          <li><a class="nav-link"  href="#about">About</a></li>
+          <li><a class="nav-link"  href="#contact">Contact</a></li>
+          <li><a class="nav-link"  href="#contact">Sign Out (Admin)</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+  <main id="main">
+    <section id="values" class="values">
+
+      <div class="container" data-aos="fade-up">
+
+        <header class="section-header">
+          <p>Update Hotel Details </p>
+        </header>
+
+        <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Photo</th>
+                <th scope="col">Hotel Name</th>
+                <th scope="col">Booking Status</th>
+                <th scope="col">Added Date</th>
+                <th scope="col">Location</th>
+                
+              </tr>
+            </thead>
+            <tbody id="data">
+
+            </tbody>
+        </table>
+
+      </div>
+
+    </section><!-- End Values Section -->
+
+    <div class="login-page">
+        <div class="form">
+            <div id="txt">
+            <p>Name:</p>
+            <input type="text" id="name" name="name" placeholder="Name"/>
+            <p>Photo:</p>
+            <input type="file" id="photo" />
+            <P>Booking Status</P>
+            <select id="bookingstatus" name="bookingstatus">
+                <option value="Booked" >Booked</option>
+                <option value="Not Booked">Not Booked</option>
+              </select>
+              <p style="margin-top:16px;">Added Date </p>
+            <input type="date" id="AddedDate" name="AddedDate"/>
+            <p>Location:</p>
+            <input type="text" id="location" placeholder="Location" name="location"/>
+            <button onclick="save()">Update Hotel</button>
+        </div>
+        </div>
+    </div>
+
+    <script>
+
+        
+document.onload = loadInitial_data()
+
+
+async function fetchData(){
+    const url = 'http://localhost:3000/Hotel_Details';
+    var urlParams = new URLSearchParams(window.location.search);
+    var id = urlParams.get('id');
+    console.log(id);
+    if(id=='undefined'){
+        return;
+    }
+    let response= await fetch(`${url}/${id}`)
+    let data= await response.json()
+    console.log(data);
+    return data;
+}
+
+ function showHotels(data){
+        let jobContainer= document.getElementById('data')
+        let jobHTML= ""
+        let i=1;
+            jobHTML += `
+            <tr>
+            <td>${i++}</td>
+            <td><img src="${data.photo}" width="200px" height="180px"/></td>
+            <td>${data.Name}</td>
+            <td>${data.BookingStatus}</td>
+            <td>${data.AddedDate}</td>
+            <td>${data.location}</td>
+          </tr>
+            `
+        jobContainer.innerHTML = jobHTML
+
+        
+    }
+
+    async function deletehotel(){
+        const url = 'http://localhost:3000/Hotel_Details';
+        var urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get('id');
+            console.log("vivek");
+            await fetch(`${url}/${id}`, {
+             method: 'DELETE',
+             headers: {
+            'Content-Type': 'application/json'
+            },
+             body: JSON.stringify()
+            })
+             
+            .then(response => response.json())
+            .then(data => {
+                
+              console.log('deleted:', data);
+            //   alert("deleted succssfully");
+              window.location="http://127.0.0.1:5500/HotelReservation/adminhoteldetails.html";
+              console.log("response");
+              
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("error invalid");
+            });
+            return;
+
+        }
+
+                    
+            
+        const url = 'http://localhost:3000/Hotel_Details';
+            const logo=document.getElementById("photo");
+
+            let photo=' ';
+
+            logo.addEventListener("change", e =>{
+            console.log(e);
+
+            const file=logo.files[0];
+            const reader=new FileReader();
+
+            reader.addEventListener("load",() =>{
+                 console.log(reader.result);
+                photo=reader.result;
+            });
+
+            reader.readAsDataURL(file);
+        });
+        
+       async function save(){
+        var urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get('id');
+
+        let name=document.getElementById("name").value;
+            let bookst=document.getElementById("bookingstatus").value;
+            let bookt=document.getElementById("AddedDate").value;
+            let loc=document.getElementById("location").value;
+            let uname="";
+            let checkin="";
+            let checkout="";
+            let phone="";
+            const userData = {
+                
+                    Name: name,
+                    photo: photo,
+                    username:uname,
+                    BookingStatus: bookst,
+                    AddedDate: bookt,
+                    Checkin: checkin,
+                    Checkout: checkout,
+                    phone: phone,
+                    location: loc
+            };
+            
+            console.log(userData);
+
+           await fetch(`${url}/${id}`, {
+             method: 'PATCH',
+             headers: {
+            'Content-Type': 'application/json'
+            },
+             body: JSON.stringify(userData)
+            })
+             
+            .then(response => response.json())
+            .then(data => {
+              console.log('Data update successfully:', data);
+              alert("Hotel updated Successfully");
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("error invalid ");
+            })
+            ;
+
+          return false;
+    }
+
+
+async function loadInitial_data(){
+    const data= await fetchData();
+    showHotels(data);
+}
+
+    </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" ></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
