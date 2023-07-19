@@ -1,6 +1,6 @@
 # Hotel_Reservation_potal
 
-Link - https://hotelreservationpotal.netlify.app/
+Link - https://hotelreservationportal.netlify.app/
 
 File Structure<br>
 Hotel Reservation
