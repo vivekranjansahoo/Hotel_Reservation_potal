@@ -720,15 +720,7 @@ section {
   height: 100%;
 }
 
-.contact .php-email-form .error-message {
-  display: none;
-  color: #fff;
-  background: #ed3c0d;
-  text-align: left;
-  padding: 15px;
-  margin-bottom: 24px;
-  font-weight: 600;
-}
+
 
 .contact .php-email-form .sent-message {
   display: none;
@@ -748,17 +740,6 @@ section {
   margin-bottom: 24px;
 }
 
-.contact .php-email-form .loading:before {
-  content: "";
-  display: inline-block;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  margin: 0 10px -6px 0;
-  border: 3px solid #18d26e;
-  border-top-color: #eee;
-  animation: animate-loading 1s linear infinite;
-}
 
 .contact .php-email-form input,
 .contact .php-email-form textarea {
@@ -795,16 +776,20 @@ section {
   background: #5969f3;
 }
 
-@keyframes animate-loading {
-  0% {
-    transform: rotate(0deg);
-  }
 
-  100% {
-    transform: rotate(360deg);
+@media (max-width: 768px) {
+  #cont{
+    margin-left: 10px;
+  }
+  .php-email-form{
+    margin-left: -150px;
   }
 }
 
+#cont{
+  width: 70%; 
+  margin-left: 190px;
+}
 
 
 /*--------------------------------------------------------------
